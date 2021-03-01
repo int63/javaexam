@@ -3,23 +3,20 @@ import java.util.Random;
 
 public class InsertionSort {
     
-    public static int[] randArray(int len, int high) {
-        assert len >0 && high > 0;
-        Random r = new Random();
-        int[] a = new int[len];
-        for(int i=0;i<a.length;i++){
-            a[i] = r.nextInt(high);
-        }
+    static int[] randArr(int sz, int ceiling) {
+        assert sz > 0;
+        Random rand = new Random();
+        int[] a = new int[sz];
+        for(int i=0;i<a.length;i++) a[i] = rand.nextInt(ceiling);
         return a;
     }
     
-    public static void log(int[] a, String prefix) {
-        System.out.print(prefix);
-        for(int i=0;i<a.length;i++) {
-            System.out.printf("%d ",a[i]);
+    static void verifySorted(int a[]) {
+        for(int i=0;i<a.length-1;i++){
+            assert(a[i] <= a[i+1]);
         }
-        System.out.println("");
     }
+    
     
     public static long sort(int[] a) {
         long moves = 0;
@@ -32,19 +29,22 @@ public class InsertionSort {
                 j--;
             }
             a[j+1] = key;
-            //log(a,String.format("\ti=%d ",i));
         }
         return moves;
     }
     
     public static void main(String[] args) {
-        int[] a = randArray(10000,20000);
-        log(a,"");
+        int n = args.length >= 1 ? Integer.parseInt(args[0]) : 10;
+        int ceiling = args.length >= 2 ? Integer.parseInt(args[1]) : 2 * n;
+        
+        int[] a = randArr(n,ceiling);
         long start = System.currentTimeMillis();
         long moves = sort(a);
         long end = System.currentTimeMillis();
-        log(a,"");
-        System.out.printf("len %d moves %d, took %d ms\n",a.length, moves, end - start);
+        verifySorted(a);
+        
+        System.out.printf("Insertion sort n=%,d, ceiling=%,d, n^2=%,d moves=%,d\n, took %,d ms\n", 
+        n, ceiling, n * n, moves, end - start);
     }
     
 }
